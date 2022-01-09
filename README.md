@@ -12,7 +12,16 @@ tiny web service for saving and organizing text pieces and searching among alrea
 :rocket: main script-file will run automatically after the start of the app container 
 ## Usage: 
 - The app container will be running on ***localhost:80***
-- Use ***/docs*** to see progect's documentation and to try out application scope
+- Use ***/docs*** to see project's documentation and to try out application scope
+## Saving:
+- You can save text piece - a json object which contains of:
+    - text: text you want to save
+    - text_type (there are two types of text you can save for now): 
+        - title
+        - parapraph
+    - page_number: number of page on which the text piece is located
+    - doc_name: name of the document where the text piece is located
+- In ***/docs*** interface specify piece text type, and fill in the request body
 ## Searching:
 - There are four modes to search: 
     - Search text pieces on definite page of the definite document:
