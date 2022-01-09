@@ -1,7 +1,7 @@
 # fast-api-w-es
 tiny web service for saving and organizing text pieces and searching among already saved results
-Created on base of [FastAPI](https://fastapi.tiangolo.com/)
-For search and store operation [ElasticSearch](https://www.elastic.co/elasticsearch/) is used.
+##Created on base of [FastAPI](https://fastapi.tiangolo.com/)
+##For search and store operation [ElasticSearch](https://www.elastic.co/elasticsearch/) is used.
 ## installation:
 #### Clone repository as usual
 #### In order to create containers for api use:
