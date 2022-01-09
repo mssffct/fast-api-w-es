@@ -1,0 +1,23 @@
+version: '2.1'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.4.3
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+    ports:
+      - ${ES_PORT}:${ES_PORT}
+    networks:
+      - docker-elk
+  web-service:
+    build: .
+    container_name: app
+    environment:
+      - ES_PORT=${ES_PORT}
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    networks:
+      - docker-elk
+networks:
+  docker-elk:
+    driver: bridge
