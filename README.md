@@ -1,7 +1,7 @@
 # fast-api-w-es
 tiny web service for saving and organizing text pieces and searching among already saved results
-##Created on base of [FastAPI](https://fastapi.tiangolo.com/)
-##For search and store operation [ElasticSearch](https://www.elastic.co/elasticsearch/) is used.
+#### Created on base of [FastAPI](https://fastapi.tiangolo.com/)
+#### For search and store operation [ElasticSearch](https://www.elastic.co/elasticsearch/) is used.
 ## installation:
 #### Clone repository as usual
 #### In order to create containers for api use:
@@ -23,6 +23,8 @@ tiny web service for saving and organizing text pieces and searching among alrea
       - specify search option as ***similar*** and type in text sample you want to find
     - Mixed search:
       - there are two ways with different parameters specified:
-          - you can search in definite document by text piece type: specify search option as ***mixed*** and choose text piece type you want
-          - also search text sample in definite document by text piece type awailable: specify search option as ***mixed*** and choose text piece type you want and type in text sample
+          - you can search in definite document by text piece type:  
+            specify search option as ***mixed*** and choose text piece type you want
+          - also search text sample in definite document by text piece type awailable:  
+            specify search option as ***mixed*** and choose text piece type you want and type in text sample
           
