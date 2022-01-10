@@ -31,7 +31,7 @@ app = FastAPI(
     title="fast-api-w-es",
     openapi_tags=tags,
 )
-es = Elasticsearch([f"localhost:{ES_PORT}"])
+es = Elasticsearch([f"elasticsearch:{ES_PORT}"])
 
 
 @app.post(
@@ -50,13 +50,15 @@ def save_text_piece(
     try:
         res = es.search(
             index=index_name,
-            query={
-                "bool": {
-                    "must": [
-                        {"match": {"text": text_piece.text}},
-                        {"match": {"text_type": text_piece.text_type}},
-                        {"match": {"page_number": text_piece.page_number}},
-                    ]
+            body={
+                "query": {
+                    "bool": {
+                        "must": [
+                            {"match": {"text": text_piece.text}},
+                            {"match": {"text_type": text_piece.text_type}},
+                            {"match": {"page_number": text_piece.page_number}},
+                        ]
+                    }
                 }
             },
         )
@@ -65,14 +67,14 @@ def save_text_piece(
             pass
         else:
             if text_piece.text:
-                es.index(index=index_name, document=text_piece_data)
+                es.index(index=index_name, doc_type="doc", body=text_piece_data)
             else:
                 raise HTTPException(
                     status_code=400, detail=f"Can't save empty text piece. "
                 )
                 pass
     except NotFoundError:
-        es.index(index=index_name, document=text_piece_data)
+        es.index(index=index_name, doc_type="doc", body=text_piece_data)
 
 
 @app.get(
@@ -95,7 +97,8 @@ def search_text_piece(
     ):
         try:
             res = es.search(
-                index=index_name, query={"match": {"page_number": page_number}}
+                index=index_name,
+                body={"query": {"match": {"page_number": page_number}}},
             )
             return res["hits"]
         except NotFoundError:
@@ -110,7 +113,7 @@ def search_text_piece(
         result = []
         for index in indexes:
             res = es.search(
-                index=index, query={"match": {"text_type": text_piece_type}}
+                index=index, body={"query": {"match": {"text_type": text_piece_type}}}
             )
             result.append(res["hits"]["hits"])
         return result
@@ -120,16 +123,21 @@ def search_text_piece(
         for index in indexes:
             res = es.search(
                 index=index,
-                query={
-                    "bool": {
-                        "must": [
-                            {
-                                "match": {
-                                    "text": {"query": text_sample, "fuzziness": "auto"}
-                                }
-                            },
-                            {"match": {"text_type": text_piece_type}},
-                        ]
+                body={
+                    "query": {
+                        "bool": {
+                            "must": [
+                                {
+                                    "match": {
+                                        "text": {
+                                            "query": text_sample,
+                                            "fuzziness": "auto",
+                                        }
+                                    }
+                                },
+                                {"match": {"text_type": text_piece_type}},
+                            ]
+                        }
                     }
                 },
             )
@@ -144,21 +152,25 @@ def search_text_piece(
         and text_piece_type
         and not text_sample
     ):
-        res = es.search(index=index_name, query={"match": {"text_type": text_piece_type}})
+        res = es.search(
+            index=index_name, body={"query": {"match": {"text_type": text_piece_type}}}
+        )
         return res
     elif option == SearchOption.mixed and doc_name and text_sample and text_piece_type:
         res = es.search(
             index=index_name,
-            query={
-                "bool": {
-                    "must": [
-                        {
-                            "match": {
-                                "text": {"query": text_sample, "fuzziness": "auto"}
-                            }
-                        },
-                        {"match": {"text_type": text_piece_type}},
-                    ]
+            body={
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "match": {
+                                    "text": {"query": text_sample, "fuzziness": "auto"}
+                                }
+                            },
+                            {"match": {"text_type": text_piece_type}},
+                        ]
+                    }
                 }
             },
         )
@@ -171,7 +183,11 @@ def search_text_piece(
     ):
         res = es.search(
             index=index_name,
-            query={"match": {"text": {"query": text_sample, "fuzziness": "auto"}}},
+            body={
+                "query": {
+                    "match": {"text": {"query": text_sample, "fuzziness": "auto"}}
+                }
+            },
         )
         return res
     else:

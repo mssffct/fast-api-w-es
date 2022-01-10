@@ -1,8 +1,7 @@
-elasticsearch
+elasticsearch==7.10.0
 fastapi
 isort
 flake8
 python-dotenv
 pytest
-responses
 uvicorn

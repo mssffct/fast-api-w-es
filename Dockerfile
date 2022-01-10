@@ -8,10 +8,6 @@ RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
 
 COPY ./app ./app
 
-RUN isort
-
-RUN flake8
-
-RUN pytest
+RUN isort ./app
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]
