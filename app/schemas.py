@@ -13,10 +13,3 @@ class TextPiece(BaseModel):
     text_type: TextPieceType = Field(..., example=TextPieceType.paragraph)
     page_number: int = Field(..., ge=1, example=2)
     doc_name: str = Field(..., example="source_document_name.pdf")
-
-
-class SearchOption(str, Enum):
-    search_by_type = "by_type"
-    search_similar = "similar"
-    search_definite = "definite"
-    mixed = "mixed"
